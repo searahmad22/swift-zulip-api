@@ -7,21 +7,21 @@ private func makeRequest(
     params: [String: String],
     username: String?,
     password: String?,
-    callback: @escaping (DataResponse<Any>) -> Void
+    callback: @escaping (DataResponse<Any, AFError>) -> Void
 ) {
-    let request = Alamofire.request(
+    let request = AF.request(
         url,
         method: method,
         parameters: params
     )
 
-    let completionHandler = { (response: DataResponse<Any>) in
+    let completionHandler = { (response: DataResponse<Any, AFError>) in
         callback(response)
     }
 
     if let username = username, let password = password {
         request.authenticate(
-            user: username,
+            username: username,
             password: password
         ).responseJSON(completionHandler: completionHandler)
     } else {
@@ -44,7 +44,7 @@ internal func makeGetRequest(
     params: [String: String],
     username: String?,
     password: String?,
-    callback: @escaping (DataResponse<Any>) -> Void
+    callback: @escaping (DataResponse<Any, AFError>) -> Void
 ) {
     makeRequest(
         method: HTTPMethod.get,
@@ -71,7 +71,7 @@ internal func makePostRequest(
     params: [String: String],
     username: String?,
     password: String?,
-    callback: @escaping (DataResponse<Any>) -> Void
+    callback: @escaping (DataResponse<Any, AFError>) -> Void
 ) {
     makeRequest(
         method: HTTPMethod.post,
@@ -98,7 +98,7 @@ internal func makePatchRequest(
     params: [String: String],
     username: String?,
     password: String?,
-    callback: @escaping (DataResponse<Any>) -> Void
+    callback: @escaping (DataResponse<Any, AFError>) -> Void
 ) {
     makeRequest(
         method: HTTPMethod.patch,
@@ -125,7 +125,7 @@ internal func makeDeleteRequest(
     params: [String: String],
     username: String?,
     password: String?,
-    callback: @escaping (DataResponse<Any>) -> Void
+    callback: @escaping (DataResponse<Any, AFError>) -> Void
 ) {
     makeRequest(
         method: HTTPMethod.delete,
@@ -144,16 +144,22 @@ internal func makeDeleteRequest(
         - response: The Alamofire JSON response.
  */
 internal func getDictionaryFromJSONResponse(
-    response: DataResponse<Any>
+    response: DataResponse<Any, AFError>
 ) -> [String: Any]? {
-    guard
-        let responseValue = response.result.value,
-        let responseDictionary = responseValue as? [String: Any]
-    else {
-        return nil
+    
+    switch response.result {
+    
+    case .success(let data):
+        guard
+            let responseDictionary = data as? [String: Any]
+        else {
+            return nil
+        }
+        return responseDictionary
+    case .failure(let error):
+        print("Alamofire ERROR: \(error)")
+        return [:]
     }
-
-    return responseDictionary
 }
 
 
@@ -165,7 +171,7 @@ internal func getDictionaryFromJSONResponse(
         - childKey: The child key to get the value of.
  */
 internal func getChildFromJSONResponse(
-    response: DataResponse<Any>,
+    response: DataResponse<Any, AFError>,
     childKey: String
 ) -> Any? {
     guard

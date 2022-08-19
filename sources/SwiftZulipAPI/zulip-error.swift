@@ -17,7 +17,7 @@ public enum ZulipError: Error {
      - Returns: The `ZulipError`.
  */
 internal func getZulipErrorFromResponse(
-    response: DataResponse<Any>
+    response: DataResponse<Any, AFError>
 ) -> ZulipError {
     guard
         let errorMessage = getChildFromJSONResponse(

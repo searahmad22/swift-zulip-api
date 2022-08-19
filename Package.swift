@@ -1,11 +1,12 @@
-// swift-tools-version:4.1
+// swift-tools-version:5.2
 
 import PackageDescription
 
 let package = Package(
     name: "SwiftZulipAPI",
-    platform: [
-        .iOS(.v11)
+    platforms: [
+        .iOS(.v11),
+        .macOS(.v10_12)
     ],
     products: [
         Product.library(name: "SwiftZulipAPI", targets: ["SwiftZulipAPI"]),
