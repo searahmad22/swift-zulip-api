@@ -4,6 +4,9 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftZulipAPI",
+    platform: [
+        .iOS(.v11)
+    ],
     products: [
         Product.library(name: "SwiftZulipAPI", targets: ["SwiftZulipAPI"]),
         Product.library(
