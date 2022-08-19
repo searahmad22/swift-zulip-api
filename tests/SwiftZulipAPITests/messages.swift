@@ -42,7 +42,7 @@ class MessagesTests: XCTestCase {
 
         zulip.messages().get(
             narrow: [["stream", "zulip-swift-tests"]],
-            anchor: 391920,
+            anchor: String(391920),
             amountBefore: 13,
             amountAfter: 13,
             callback: { (messages, messageError) in

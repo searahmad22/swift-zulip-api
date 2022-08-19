@@ -22,7 +22,7 @@ let package = Package(
     dependencies: [
         Package.Dependency.package(
             url: "https://github.com/Alamofire/Alamofire.git",
-            from: "4.0.0"
+            from: "5.6.1"
         ),
     ],
     targets: [

@@ -134,7 +134,7 @@ case "messages.get":
 
     zulip.messages().get(
         narrow: narrow,
-        anchor: anchor,
+        anchor: String(anchor),
         amountBefore: amountBefore,
         amountAfter: amountAfter,
         callback: { (messages, error) in
